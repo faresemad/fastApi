@@ -21,8 +21,3 @@ async def read_users():
 @app.get("/users")
 async def read_users2():
     return ["Bean", "Elfo"]
-#=========================================
-# @app.get("/components/{component_id}")
-# async def get_component(component_id):
-#     return {"component_id": component_id}
-#=========================================
