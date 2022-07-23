@@ -1,7 +1,10 @@
-# Query Parameters
-from typing import Optional
+# Request Body And The POST Method
+from typing import Counter, Optional
 from fastapi import FastAPI
+from pydantic import BaseModel
+
 app = FastAPI()
+
 students = {
     1 : {
         "name": "Fares",
@@ -25,6 +28,16 @@ students = {
     }
 }
 
+class Student(BaseModel):
+    name    : str
+    age     : int
+    email   : str
+    address : str
+    city    : str
+    state   : str
+    country : str
+    phone   : str
+
 @app.get('/')
 def root():
     return {"Name" : "Fares Emad"}
@@ -36,6 +49,9 @@ def get_std(name :Optional[str] = None , age :Optional[int] = None):
             return students[student_id]
     return {"Msg" : "Not Found"}
 
-# http://127.0.0.1:8000/get-std?name=Fares
-# http://127.0.0.1:8000/get-std?age=21
-# http://127.0.0.1:8000/get-std?name=Fares&age=21
+@app.post('/create_students/{student_id}')
+def create_students(student_id:int , student : Student):
+    if student_id in students:
+        return {"Error":"Student already exists"}
+    students[student_id] = student
+    return students[student_id]
