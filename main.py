@@ -1,4 +1,4 @@
-# PUT Method
+# DELETE Method
 from typing import Counter, Optional
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -87,3 +87,10 @@ def create_students(student_id:int , student : UpdateStudent):
         students[student_id].phone = student.phone
 
     return students[student_id]
+
+@app.delete('/delete-student/{student_id}')
+def delete_student(student_id:int):
+    if student_id not in students:
+        return {"Error":"Student not found"}
+    del students[student_id]
+    return {"Success":"Successfully deleted"}
