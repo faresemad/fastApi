@@ -1,10 +1,11 @@
-# path parameters
-from fastapi import FastAPI , Path
+# Query Parameters
+from typing import Optional
+from fastapi import FastAPI
 app = FastAPI()
 students = {
     1 : {
         "name": "Fares",
-        "age": "21",
+        "age": 21,
         "email": "fares@example.com",
         "address": "example",
         "city": "San Francisco",
@@ -14,7 +15,7 @@ students = {
     },
     2 : {
         "name": "Shaimaa",
-        "age": "20",
+        "age": 20,
         "email": "shaimaa@example.com",
         "address": "example",
         "city": "San Francisco",
@@ -23,14 +24,18 @@ students = {
         "phone": "123-456-7890",
     }
 }
+
 @app.get('/')
 def root():
     return {"Name" : "Fares Emad"}
 
-# @app.get('/students/{student_id}')
-# def get_student(student_id:int):
-#     return students[student_id]
+@app.get('/get-std')
+def get_std(name :Optional[str] = None , age :Optional[int] = None):
+    for student_id in students:
+        if (students[student_id]["name"] == name) or (students[student_id]["age"] == age):
+            return students[student_id]
+    return {"Msg" : "Not Found"}
 
-@app.get('/students/{student_id}')
-def get_student(student_id:int = Path(None,description="The ID of the student you want to view",gt=0,lt=3)):
-    return students[student_id]
+# http://127.0.0.1:8000/get-std?name=Fares
+# http://127.0.0.1:8000/get-std?age=21
+# http://127.0.0.1:8000/get-std?name=Fares&age=21
